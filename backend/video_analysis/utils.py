@@ -22,7 +22,7 @@ class DeepfakeDetector:
             if not os.path.exists(model_path):
                 raise FileNotFoundError(f"Model file not found at {model_path}")
             
-            print(f"loading state dict {model_path}")
+            #print(f"loading state dict {model_path}")
             
             # Load checkpoint first to see its structure
             try:
@@ -53,10 +53,10 @@ class DeepfakeDetector:
                 model.load_state_dict(cleaned_state_dict, strict=True)
                 print("✅ Loaded model successfully!")
             except RuntimeError as e:
-                print(f"❌ Strict loading failed: {e}")
+                #print(f"❌ Strict loading failed: {e}")
                 
                 # Let's try a more flexible approach
-                print("🔧 Trying flexible loading...")
+                #print("🔧 Trying flexible loading...")
                 
                 # Get model's current state dict
                 model_dict = model.state_dict()
@@ -79,17 +79,17 @@ class DeepfakeDetector:
                         alt_key = model_key.replace('fc.', 'classifier.')
                         if alt_key in cleaned_state_dict and cleaned_state_dict[alt_key].shape == model_shape:
                             matched_dict[model_key] = cleaned_state_dict[alt_key]
-                            print(f"✅ Mapped: {alt_key} -> {model_key}")
+                            #print(f"✅ Mapped: {alt_key} -> {model_key}")
                     elif 'classifier.' in model_key:
                         alt_key = model_key.replace('classifier.', 'fc.')
                         if alt_key in cleaned_state_dict and cleaned_state_dict[alt_key].shape == model_shape:
                             matched_dict[model_key] = cleaned_state_dict[alt_key]
-                            print(f"✅ Mapped: {alt_key} -> {model_key}")
+                            #print(f"✅ Mapped: {alt_key} -> {model_key}")
                 
                 # Update model with matched weights
                 model_dict.update(matched_dict)
                 model.load_state_dict(model_dict)
-                print(f"✅ Loaded {len(matched_dict)}/{len(model_dict)} layers")
+                #print(f"✅ Loaded {len(matched_dict)}/{len(model_dict)} layers")
             
             model.eval()
             del checkpoint
@@ -101,7 +101,7 @@ class DeepfakeDetector:
             video_read_fn = lambda x: video_reader.read_frames(x, num_frames=frames_per_video)
             self.face_extractor = FaceExtractor(video_read_fn)
             
-            print(f"Successfully loaded {len(self.models)} model(s)")
+            #print(f"Successfully loaded {len(self.models)} model(s)")
             
         except Exception as e:
             print(f"Error loading model: {str(e)}")
@@ -163,5 +163,5 @@ def get_detector():
     if detector is None:
         print("Initializing deepfake detector using YOUR original code...")
         detector = DeepfakeDetector()
-        print("Detector ready!")
+        #print("Detector ready!")
     return detector

@@ -5,6 +5,8 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+DEEPFAKE_MODEL_PATH = os.path.join(BASE_DIR, 'models', 'enhanced_deepfake_model.pth')
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-your-secret-key-change-in-production'
 
